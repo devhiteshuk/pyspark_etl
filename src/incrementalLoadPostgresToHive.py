@@ -7,7 +7,7 @@ max_id = spark.sql("SELECT max(id) FROM bigdata_nov_2024.person")
 m_id = max_id.collect()[0][0]
 str(m_id)
 
-query = 'SELECT * FROM bigdata_nov_2024.person;' # WHERE id > 206' + str(m_id)
+query = 'SELECT * FROM bigdata_nov_2024.person' # WHERE id > 206' + str(m_id)
 
 more_data = spark.read.format("jdbc") \
     .option("url", "jdbc:postgresql://18.132.73.146:5432/testdb") \
