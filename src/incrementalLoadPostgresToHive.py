@@ -3,11 +3,11 @@ from pyspark.sql.functions import *
 from pyspark.sql import functions as F
 
 spark = SparkSession.builder.master("local").appName("HiteshProject").enableHiveSupport().getOrCreate()
-max_id = spark.sql("SELECT max(id) FROM people")
+max_id = spark.sql("SELECT max(id) FROM bigdata_nov_2024.person")
 m_id = max_id.collect()[0][0]
 str(m_id)
 
-query = 'SELECT * FROM bigdata_nov_2024.people WHERE "ID" > ' + str(m_id)
+query = 'SELECT * FROM bigdata_nov_2024.person WHERE "ID" > ' + str(m_id)
 
 more_data = spark.read.format("jdbc") \
     .option("url", "jdbc:postgresql://ec2-3-9-191-104.eu-west-2.compute.amazonaws.com:5432/testdb") \
@@ -24,7 +24,7 @@ more_data_with_email = more_data.withColumn('email_address', F.concat(more_data[
 # Show the updated DataFrame with the new column
 more_data_with_email.show()
 
-more_data_with_email.write.mode("append").saveAsTable("bigdata_nov_2024.people")
+more_data_with_email.write.mode("append").saveAsTable("bigdata_nov_2024.person")
 print("Successfully Load to Hive")
 
 # spark-submit --master local[*] --jars /var/lib/jenkins/workspace/nagaranipysparkdryrun/lib/postgresql-42.5.3.jar src/IncreamentalLoadPostgressToHive.py
